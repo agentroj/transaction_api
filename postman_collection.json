@@ -1,0 +1,35 @@
+{
+    "info": {
+      "name": "Transaction API",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Create Transaction",
+        "request": {
+          "method": "POST",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"transaction_type\": \"DEPOSIT\",\n  \"amount\": 100.00,\n  \"description\": \"Initial deposit\"\n}"
+          },
+          "url": { "raw": "{{base_url}}/transactions/", "host": ["{{base_url}}"], "path": ["transactions", ""] }
+        }
+      },
+      {
+        "name": "List Transactions",
+        "request": {
+          "method": "GET",
+          "url": { "raw": "{{base_url}}/transactions/", "host": ["{{base_url}}"], "path": ["transactions", ""] }
+        }
+      },
+      {
+        "name": "Get Transaction by ID",
+        "request": {
+          "method": "GET",
+          "url": { "raw": "{{base_url}}/transactions/1/", "host": ["{{base_url}}"], "path": ["transactions", "1"] }
+        }
+      }
+    ]
+  }
+  
