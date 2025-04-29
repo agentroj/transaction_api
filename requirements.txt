@@ -2,3 +2,5 @@ Django
 djangorestframework
 gunicorn
 drf-spectacular
+pytest-django
+pytest

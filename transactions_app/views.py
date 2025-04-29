@@ -1,7 +1,7 @@
 import logging
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import ValidationError, NotFound
 from .models import Transaction
 from .serializers import TransactionSerializer
 
@@ -17,22 +17,25 @@ class TransactionListCreateView(generics.ListCreateAPIView):
         try:
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
+        except ValidationError as exc:
+            # exc.detail is a dict of field errors
+            logger.error(f"Validation failed: {exc.detail}", exc_info=True)
+            return Response(exc.detail, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
-            logger.error(f"Error creating transaction: {exc}", exc_info=True)
+            logger.error(f"Unexpected error: {exc}", exc_info=True)
             return Response(
-                {"detail": str(exc)},
-                status=status.HTTP_400_BAD_REQUEST
+                {"detail": "Internal server error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
         headers = self.get_success_headers(serializer.data)
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED,
             headers=headers
-        )
+            )
 
 
 class TransactionDetailView(generics.RetrieveAPIView):
-    queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
 
     def get_object(self):
@@ -43,4 +46,4 @@ class TransactionDetailView(generics.RetrieveAPIView):
             raise NotFound(
                 detail=f"Transaction with id={pk} not found",
                 code=status.HTTP_404_NOT_FOUND
-                )
+            )
