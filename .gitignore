@@ -1,0 +1,12 @@
+*/__pycache__
+__pycache__
+*.sqlite3
+.env
+*.env
+venv
+/venv
+/venv/
+db.sqlite3
+transactions_app/__pycache__/serializers.cpython-310.pyc
+transactions_app/__pycache__/views.cpython-310.pyc
+transactions_app/__pycache__/*
